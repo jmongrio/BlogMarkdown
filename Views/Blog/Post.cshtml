@@ -1,0 +1,25 @@
+﻿@model BlogPost
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="display-4">@Model.Title</h1>
+        <div>
+            <a class="btn btn-primary me-2" href="@Url.Action("Edit", "Blog", new { slug = Model.Slug })">
+                <i class="bi bi-pencil-square"></i> Editar
+            </a>
+            <a class="btn btn-outline-secondary" asp-action="Index" asp-controller="Blog">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+    </div>
+
+    <p class="text-muted fst-italic small mb-4">
+        Última actualización: @Model.LastModified.ToString("yyyy-MM-dd HH:mm")
+    </p>
+
+    <hr />
+
+    <article class="blog-post-content" style="line-height: 1.6; font-size: 1.1rem;">
+        @Html.Raw(Model.ContentHtml)
+    </article>
+</div>

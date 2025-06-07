@@ -1,0 +1,42 @@
+﻿@model BlogPostInput
+
+<div class="container my-5" style="max-width: 800px;">
+    <h1 class="mb-4">Crear nuevo post</h1>
+
+    <form asp-action="Create" method="post" novalidate>
+        <div class="mb-4">
+            <label asp-for="Title" class="form-label">Título:</label>
+            <input class="form-control" asp-for="Title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-4">
+            <label asp-for="MarkdownContent" class="form-label">Contenido (Markdown):</label>
+            <textarea asp-for="MarkdownContent" class="form-control" id="markdown-editor" rows="15"></textarea>
+            <span asp-validation-for="MarkdownContent" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+            <a class="btn btn-outline-secondary" asp-action="Index">Volver</a>
+            <button class="btn btn-primary" type="submit">Guardar</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const easyMDE = new EasyMDE({
+            element: document.getElementById("markdown-editor"),
+            spellChecker: false,
+            status: false,
+            toolbar: [
+                "table",
+                "bold", "italic", "heading", "|",
+                "quote", "unordered-list", "ordered-list", "|",
+                "link", "image", "|",
+                "preview", "side-by-side", "fullscreen", "|",
+                "guide"
+            ]
+        });
+    </script>
+}

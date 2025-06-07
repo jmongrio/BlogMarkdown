@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Galería de Imágenes";
+    var images = ViewBag.Images as List<string>;
+}
+
+<div class="container my-5" style="max-width: 1000px;">
+    <h1 class="h1 mb-4">Galería de Imágenes</h1>
+
+    <form asp-action="UploadImage" method="post" enctype="multipart/form-data" class="mb-4">
+        <div class="input-group">
+            <input type="file" name="image" id="image" class="form-control" aria-label="Seleccionar imagen para subir" />
+            <button type="submit" class="btn btn-primary">Subir imagen</button>
+            <a class="btn btn-outline-secondary ms-2" asp-action="Index" asp-controller="Blog">Volver</a>
+        </div>
+    </form>
+
+    <hr class="my-4" />
+
+    <h2 class="h4 mb-3">Imágenes subidas</h2>
+
+    @if (images == null || !images.Any())
+    {
+        <p class="text-muted fst-italic">No hay imágenes disponibles.</p>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var image in images)
+            {
+                var imageUrl = Url.Content($"~/images/posts/{image}");
+                var markdown = $"![{image}]({imageUrl})";
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <a href="@imageUrl" target="_blank" rel="noopener noreferrer" class="d-block overflow-hidden" style="height: 180px;">
+                            <img src="@imageUrl" class="card-img-top img-hover-scale" alt="@image" style="object-fit: cover; width: 100%; height: 100%;" />
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title text-truncate" title="@image">@image</h6>
+                            <small class="form-text mt-2 mb-1">Markdown (clic para copiar):</small>
+                            <code class="markdown-copy d-block text-primary" style="font-size: 0.8em; cursor: pointer;" onclick="copyToClipboard(this)" title="Copiar markdown">
+                                @markdown
+                            </code>
+
+                            <form asp-action="DeleteImage" method="post" class="mt-auto">
+                                <input type="hidden" name="imageName" value="@image" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger w-100 mt-3"
+                                        onclick="return confirm('¿Estás seguro de eliminar esta imagen?');">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .img-hover-scale:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        function copyToClipboard(element) {
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const original = element.textContent;
+                element.textContent = "¡Copiado! ✅";
+                element.classList.replace("text-primary", "text-success");
+                setTimeout(() => {
+                    element.textContent = original;
+                    element.classList.replace("text-success", "text-primary");
+                }, 1500);
+            }).catch(err => {
+                alert("No se pudo copiar: " + err);
+            });
+        }
+    </script>
+}

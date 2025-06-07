@@ -1,0 +1,49 @@
+﻿@model IEnumerable<BlogPost>
+
+<!-- Hero / Jumbotron -->
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm">
+    <div class="container-fluid py-3">
+        <h1 class="display-4">📝 Blog</h1>
+        <p class="lead">
+            Mi rincón de ideas 🧠
+        </p>
+
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-primary" asp-action="Create">
+                <i class="bi bi-plus-circle"></i> Nuevo post
+            </a>
+            <a class="btn btn-outline-primary" asp-action="Posts">
+                <i class="bi bi-gear"></i> Administrar posts
+            </a>
+            <a class="btn btn-outline-secondary" href="@Url.Action("Media", "Blog")">
+                <i class="bi bi-image"></i> Galería
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Lista de posts -->
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No hay publicaciones aún. ¡Crea la primera!</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        @foreach (var post in Model)
+        {
+            <div class="col">
+                <a href="@Url.Action("Post", "Blog", new { slug = post.Slug })" class="text-decoration-none text-dark">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@post.Title</h5>
+                            <p class="card-text text-muted mb-0">
+                                Última edición: @post.LastModified.ToString("yyyy-MM-dd")
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+}
